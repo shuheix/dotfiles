@@ -47,6 +47,9 @@ if [ -f '/Users/shuheix/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/s
 # Added by Antigravity
 export PATH="/Users/shuheix/.antigravity/antigravity/bin:$PATH"
 
+eval "$(zoxide init zsh)"
+eval "$(atuin init zsh)"
+
 # command alias
 alias ls='eza --icons'
 alias ll='eza -lh --git --icons'
