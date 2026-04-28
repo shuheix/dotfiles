@@ -1,5 +1,15 @@
+{{ if eq .chezmoi.os "linux" -}}
+# --- Linux ---
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+{{ else if eq .chezmoi.os "darwin" -}}
+# --- macOS ---
+alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+eval "$(/opt/homebrew/bin/brew shellenv)"
+{{ end -}}
+
+
 # Enable zplug
-export ZPLUG_HOME=/opt/homebrew/opt/zplug
+export ZPLUG_HOME=$(brew --prefix)/opt/zplug
 source $ZPLUG_HOME/init.zsh
 
 # like fish
@@ -7,6 +17,7 @@ zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "zsh-users/zsh-autosuggestions", defer:2
 zplug "zsh-users/zsh-completions"
 zplug "chrissicool/zsh-256color"
+
 ## Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then
   printf "Install? [y/N]: "
@@ -14,6 +25,7 @@ if ! zplug check --verbose; then
     echo; zplug install
   fi
 fi
+
 ## Then, source plugins and add commands to $PATH
 zplug load
 
@@ -31,15 +43,9 @@ function peco-src(){
 }
 zle -N peco-src
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/shuheix/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/shuheix/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/shuheix/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/shuheix/google-cloud-sdk/completion.zsh.inc'; fi
-
-# Added by Antigravity
-export PATH="/Users/shuheix/.antigravity/antigravity/bin:$PATH"
-
+# Google Cloud SDK
+if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
+if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
 # command alias
 alias ls='eza --icons'
 alias ll='eza -lh --git --icons'
@@ -47,6 +53,3 @@ alias tree='eza -T'
 
 export PATH="$HOME/.local/bin:$PATH"
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
